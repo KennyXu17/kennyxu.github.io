@@ -1,24 +1,28 @@
-name: Jekyll site CI
+name: Build and Deploy Jekyll site
 
 on:
   push:
     branches: ["main"]
-  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
-      - uses: ruby/setup-ruby@v1
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1' # 或者你 Gemfile 里需要的版本
+          ruby-version: '3.1' # 或你 Gemfile 里指定的版本
+
       - name: Install dependencies
-        run: |
-          bundle install
+        run: bundle install
+
       - name: Build site
         run: bundle exec jekyll build
-      - name: Deploy to GitHub Pages
+
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
